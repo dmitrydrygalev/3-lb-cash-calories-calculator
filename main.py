@@ -1,7 +1,7 @@
 import datetime
 import math
 
-rates = {'THB': 1.61, 'TRY': 2.61, 'RUB': 1}  # оптимизированно if else при проверке валюты
+rates = {'THB': 1.61, 'TRY': 2.61, 'RUB': 1}
 
 
 class Rec:
@@ -13,7 +13,7 @@ class Rec:
                 self.date = datetime.datetime.strptime(date, '%Y-%m-%d').date()
 
         except:
-            self.date = datetime.date.today()  # оптимизированна конструкция try except для проверки даты
+            self.date = datetime.date.today()
 
     def __repr__(self):
         return f"{self.amount} - {self.comment} - {self.date}"  # records выводился в виде объекта, repr позволил
