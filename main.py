@@ -22,8 +22,9 @@ class Rec:
 
 class Calc:
 
-    def __init__(self, limit):
+    def __init__(self, limit, date):
         self.limit = limit
+        self.date = date
         self.records = []
 
     def add_record(self, record):
@@ -48,22 +49,19 @@ class Calc:
         return sum
 
     def curr_date_count(self):
-        dates_for_sum = input('Введите интересующие вас даты, через пробел (2010-09-25 2012-08-13) -')
-        sum = 0
-        sum_dates = dates_for_sum.split(' ')
+        amount_summ_of_current_date = 0
 
         for record in self.records:
+            if str(record.date) == str(self.date):
+                amount_summ_of_current_date += record.amount
 
-            if str(datetime.datetime.strptime(record.date, "%Y-%m-%d")) in sum_dates:
-                sum += record.amount
-
-        return sum
+        return amount_summ_of_current_date
 
 
 class CashCL(Calc):
 
-    def __init__(self, currency, limit):
-        super().__init__(limit)
+    def __init__(self, currency, limit, date):
+        super().__init__(limit, date)
         self.currency = currency
 
     def get_today_cash_remained(self):
@@ -75,8 +73,7 @@ class CashCL(Calc):
         if self.limit > sum_for_limit:
             for key, value in rates.items():
                 if self.currency == key:
-                    print(f'На сегодня осталось {math.floor(self.limit - (sum_for_limit / value))} {key}')
-        return '----------'
+                    return f'На сегодня осталось {math.floor(self.limit - (sum_for_limit / value))} {key}'
 
 
 class CaloriesCL(Calc):
@@ -87,16 +84,12 @@ class CaloriesCL(Calc):
         return str(f'Ваш лимит по калориям на сегодня - {self.limit - self.get_today_stat()} ккалл.')
 
 
-user = CashCL('THB', 1000)
-userX = CaloriesCL(1000)
+user = CashCL('THB', 1000, '2022-11-15')
 user.add_record(Rec(30, 'Заправка Лукоил', '2022-10-21'))
 user.add_record(Rec(300, 'Поездака в Нижний Новгород', ''))
 user.add_record(Rec(300, 'Поездака в Кисловодск', '2022-10-20'))
 user.add_record(Rec(10, 'Покупка хлеба', '2022-10-19'))
 
-userX.add_record(Rec(300, 'Пробежка 10км', ''))
-
 print(user.get_today_stat())
-print(user.last_sevendays_stat())
-print(user.get_today_cash_remained())
-print(userX.get_calories_remained())
+
+
